@@ -27,13 +27,11 @@ public class LoginTask extends AsyncTask<Void, Void, String[]> {
             OAuth10aService service = OAuthServiceBuilder.getService((University) new UniversityAdapter().getItem(id));
             final OAuth1RequestToken requestToken = service.getRequestToken();
             String authUrl = service.getAuthorizationUrl(requestToken);
-            String[] request_token= {authUrl, requestToken.getToken(), requestToken.getTokenSecret(), requestToken.getRawResponse()};
-
+            String[] request_token = {authUrl, requestToken.getToken(), requestToken.getTokenSecret(), requestToken.getRawResponse()};
             return request_token;
-        } catch (Exception ignore) {
-
+        } catch (Exception e){
+            return null;
         }
-        return null;
     }
 }
 

@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.concurrent.ExecutionException;
 
@@ -16,6 +17,7 @@ import pl.edu.wat.usos.usosapp.adapter.UniversityAdapter;
 public class MainActivity extends AppCompatActivity {
 
     Spinner spinner;
+    Context context = this;
     UniversityAdapter universityAdapter;
 
     @Override
@@ -28,14 +30,25 @@ public class MainActivity extends AppCompatActivity {
         spinner.setAdapter(universityAdapter);
     }
 
-    public void login(View view) throws ExecutionException, InterruptedException {
+    public void login(View view) {
         int position = spinner.getSelectedItemPosition();
         save_university_id(position);
-        String[] request_token = new LoginTask(position).execute().get();
-        save_requestToken(request_token);
-        String authURL = request_token[0];
-        Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(authURL));
-        startActivity(i);
+        String[] request_token = new String[0];
+        try {
+            request_token = new LoginTask(position).execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        if(request_token != null) {
+            save_requestToken(request_token);
+            String authURL = request_token[0];
+            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(authURL));
+            startActivity(i);
+        } else {
+            Toast.makeText(getApplicationContext(), "Błąd. Sprawdź połączenie z internetem", Toast.LENGTH_LONG).show();
+        }
     }
 
     public void save_requestToken(String[] request_token) {

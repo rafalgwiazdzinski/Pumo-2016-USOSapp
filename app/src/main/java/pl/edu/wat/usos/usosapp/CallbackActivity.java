@@ -45,12 +45,6 @@ public class CallbackActivity extends AppCompatActivity {
         new AccessTokenTask().execute();
     }
 
-   // @Override
-   // protected void onResume() {
-   //
-
-   // }
-
     public OAuth1RequestToken readRequestToken() {
 
         SharedPreferences sharedPref = getSharedPreferences("appPref", Context.MODE_PRIVATE);
