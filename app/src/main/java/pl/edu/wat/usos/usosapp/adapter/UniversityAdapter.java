@@ -61,6 +61,5 @@ public class UniversityAdapter extends BaseAdapter {
         ((TextView) convertView).setText(item.name);
 
         return convertView;
-
     }
 }
