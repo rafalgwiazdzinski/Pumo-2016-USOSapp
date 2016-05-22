@@ -15,7 +15,7 @@ public class UsosAPI extends DefaultApi10a {
     private static final String AUTHORIZE_URL = "/oauth/authorize?oauth_token=%s";
     private static final String REQUEST_TOKEN_RESOURCE = "/oauth/request_token";
     private static final String ACCESS_TOKEN_RESOURCE = "/oauth/access_token";
-    private static final String SCOPES = "?scopes=cards|grades|email|photo"; // przykladowe
+    private static final String SCOPES = "?scopes=cards|grades|email|photo|studies"; // przykladowe
 
     public UsosAPI() {
     }

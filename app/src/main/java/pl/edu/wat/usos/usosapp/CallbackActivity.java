@@ -41,11 +41,11 @@ import pl.edu.wat.usos.usosapp.university.University;
 
 public class CallbackActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
-    TextView name, sex, email;
+    private TextView name, sex, email;
     private String oauth_token;
     private String oauth_verifier;
     int university_id;
-    Context context = this;
+    private Context context = this;
 
     private DrawerLayout drawerLayout;
     private ListView listView;
@@ -55,7 +55,7 @@ public class CallbackActivity extends AppCompatActivity implements AdapterView.O
 
     private OAuth1AccessToken accessToken;
 
-    User user;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -199,7 +199,7 @@ public class CallbackActivity extends AppCompatActivity implements AdapterView.O
             try {
                 OAuth10aService service = OAuthServiceBuilder.getService((University) new UniversityAdapter().getItem(university_id));
                 accessToken = service.getAccessToken(readRequestToken(), oauth_verifier);
-                OAuthRequest request = new OAuthRequest(Verb.GET, new ApiUrls().getStudentInfoUrl(), service);
+                OAuthRequest request = new OAuthRequest(Verb.GET, new ApiUrls(university_id).getStudentInfoUrl(), service);
                 service.signRequest(accessToken, request);
                 Response response = request.send();
                 String responseBody = response.getBody();

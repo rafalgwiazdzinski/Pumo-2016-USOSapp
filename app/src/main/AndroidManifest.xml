@@ -19,7 +19,8 @@
         </activity>
         <activity
             android:name=".CallbackActivity"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:label="Informacje">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -29,7 +30,8 @@
                 <data android:scheme="usosapp" />
             </intent-filter>
         </activity>
-        <activity android:name=".GradesActivity"></activity>
+        <activity android:name=".GradesActivity"
+            android:label="Oceny"></activity>
     </application>
 
 </manifest>

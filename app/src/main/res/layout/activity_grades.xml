@@ -14,18 +14,11 @@
         android:layout_height="wrap_content"
         android:id="@+id/spinner"
         android:layout_gravity="center_horizontal" />
-
-    <android.support.v7.widget.RecyclerView
-        android:layout_below="@id/spinner"
-        android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="vertical" />
-
     <ScrollView
-        android:layout_below="@id/recycler_view"
+        android:layout_below="@id/spinner"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView">
 
         <TextView
             android:layout_width="wrap_content"
@@ -33,5 +26,13 @@
             android:id="@+id/json"/>
 
     </ScrollView>
+    <android.support.v7.widget.RecyclerView
+        android:layout_below="@id/scrollView"
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical" />
+
+
 
 </RelativeLayout>

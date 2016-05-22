@@ -8,11 +8,9 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import pl.edu.wat.usos.usosapp.API.Courses;
+import pl.edu.wat.usos.usosapp.API.GroupsUser;
 import pl.edu.wat.usos.usosapp.R;
-import pl.edu.wat.usos.usosapp.university.University;
 
 /**
  * Created by Rafal on 2016-05-16.
@@ -22,10 +20,10 @@ public class SemesterAdapter extends BaseAdapter{
     public ArrayList<String> semesters;
     private LayoutInflater layoutInflater;
     public String[] semestersIdSorted;
-    Courses.Terms[] terms;
-    Integer[] orders;
+    private GroupsUser.Terms[] terms;
+    private Integer[] orders;
 
-    public SemesterAdapter(Context context, Integer[] orders, Courses.Terms[] terms) {//ArrayList<String> semesters) {
+    public SemesterAdapter(Context context, Integer[] orders, GroupsUser.Terms[] terms) {//ArrayList<String> semesters) {
         //this.semesters = semesters;
         this.orders = orders;
         this.terms = terms;

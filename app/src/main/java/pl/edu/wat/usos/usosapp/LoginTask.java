@@ -15,7 +15,7 @@ import pl.edu.wat.usos.usosapp.university.University;
  */
 public class LoginTask extends AsyncTask<Void, Void, String[]> {
 
-    int id;
+    private int id;
 
     public LoginTask(int id) {
         this.id = id;

@@ -25,9 +25,9 @@ import pl.edu.wat.usos.usosapp.adapter.UniversityAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
-    Spinner spinner;
-    Context context = this;
-    UniversityAdapter universityAdapter;
+    private Spinner spinner;
+    private Context context = this;
+    private UniversityAdapter universityAdapter;
 
 
 
