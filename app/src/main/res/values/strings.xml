@@ -6,6 +6,7 @@
     <string-array name="array_string">
         <item>Oceny</item>
         <item>O programie</item>
+        <item>Wyloguj</item>
     </string-array>
 </resources>
 

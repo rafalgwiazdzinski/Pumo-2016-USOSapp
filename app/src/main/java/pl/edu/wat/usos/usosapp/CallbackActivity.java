@@ -2,6 +2,7 @@ package pl.edu.wat.usos.usosapp;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -34,6 +35,7 @@ import org.json.JSONObject;
 
 import java.util.concurrent.ExecutionException;
 
+import pl.edu.wat.usos.usosapp.API.LogOut;
 import pl.edu.wat.usos.usosapp.API.User;
 import pl.edu.wat.usos.usosapp.OAuth.OAuthServiceBuilder;
 import pl.edu.wat.usos.usosapp.adapter.UniversityAdapter;
@@ -102,19 +104,37 @@ public class CallbackActivity extends AppCompatActivity implements AdapterView.O
         new AccessTokenTask().execute();
     }
 
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        name.setText("");
+        sex.setText("");
+        email.setText("");
+        new AccessTokenTask().execute();
+    }
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
         switch(position){
             case 0:
                 startActivity(new Intent(this, GradesActivity.class));
+                drawerLayout.closeDrawers();
                 break;
-            default:
+            case 1:
                 AlertDialog.Builder alert = new AlertDialog.Builder(CallbackActivity.this);
                 alert.setTitle("O programie");
                 alert.setMessage("Aplikacja USOSapp została wykonana w ramach projektu z przedmiotu PUMO\n\nSkład podgrupy:\n    Rafał Gwiaździński\n    Adrian Malczyk\n    Michał Turlej\n\nGrupa: E3C2S1");
                 alert.setPositiveButton("OK", null);
                 alert.show();
+                drawerLayout.closeDrawers();
+                break;
+            default:
+                drawerLayout.closeDrawers();
+                new LogOutQuery().execute();
+
                 break;
         }
 
@@ -192,10 +212,10 @@ public class CallbackActivity extends AppCompatActivity implements AdapterView.O
         editor.commit();
     }
 
-    public class AccessTokenTask extends AsyncTask<Void, Void, Void> {
+    public class AccessTokenTask extends AsyncTask<Void, Void, User> {
 
         @Override
-        protected Void doInBackground(Void... params) {
+        protected User doInBackground(Void... params) {
             try {
                 OAuth10aService service = OAuthServiceBuilder.getService((University) new UniversityAdapter().getItem(university_id));
                 accessToken = service.getAccessToken(readRequestToken(), oauth_verifier);
@@ -206,22 +226,40 @@ public class CallbackActivity extends AppCompatActivity implements AdapterView.O
                 Gson gson = new Gson();
 
                 user = gson.fromJson(responseBody, User.class);
+                return user;
             } catch (Exception e) {
                 e.printStackTrace();
+                return null;
             }
-            return null;
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
+        protected void onPostExecute(User u) {
+            super.onPostExecute(u);
             try {
                 setInformations();
                 save_student_ID();
                 saveAccessToken();
             } catch (NullPointerException e) {
-                Toast.makeText(context, "Błąd podczas wczytywania danych, zrestartuj aplikacje i spóbuj ponownie.", Toast.LENGTH_LONG).show();
+                Intent i = new Intent(context, MainActivity.class);
+                startActivity(i);
             }
+        }
+    }
+
+    public class LogOutQuery extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            user = null;
+            OAuth10aService service = OAuthServiceBuilder.getService((University) new UniversityAdapter().getItem(university_id));
+            OAuthRequest request = new OAuthRequest(Verb.GET, new ApiUrls(university_id).getRevokeToken(), service);
+            service.signRequest(accessToken, request);
+            request.send();
+            String logOutURL = new ApiUrls(university_id).getLogOut();
+            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(logOutURL));
+            startActivity(i);
+            return null;
         }
     }
 }

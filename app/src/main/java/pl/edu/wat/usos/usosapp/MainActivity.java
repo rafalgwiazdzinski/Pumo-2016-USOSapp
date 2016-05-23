@@ -41,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
         spinner.setAdapter(universityAdapter);
     }
 
+    @Override
+    public void onBackPressed() {
+    }
 
     public void login(View view) {
         int position = spinner.getSelectedItemPosition();

@@ -199,11 +199,17 @@ public class GradesActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(GroupsUser o) {
             super.onPostExecute(o);
-            if(o != null) {
-                Integer[] posortowane_semestry = sortowanie_semestrow();
-                semestrAdapter = new SemesterAdapter(context, posortowane_semestry, o.getTerms());
-                spinner.setAdapter(semestrAdapter);
-                responseBody = "";
+            try {
+                if (o != null) {
+                    Integer[] posortowane_semestry = sortowanie_semestrow();
+                    semestrAdapter = new SemesterAdapter(context, posortowane_semestry, o.getTerms());
+                    spinner.setAdapter(semestrAdapter);
+                    responseBody = "";
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+                Toast.makeText(context, "Zaloguj się!", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(context, MainActivity.class));
             }
         }
     }
