@@ -34,10 +34,14 @@
             android:layout_gravity="center_horizontal" />
 
         <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/buttonshape"
             android:id="@+id/log_in"
+            android:shadowColor="#A8A8A8"
             android:text="Log in"
+            android:typeface="serif"
+            android:textColor="#FFFFFF"
             android:onClick="login"
             android:layout_below="@+id/imageView"
             android:layout_marginTop="10dp" />
