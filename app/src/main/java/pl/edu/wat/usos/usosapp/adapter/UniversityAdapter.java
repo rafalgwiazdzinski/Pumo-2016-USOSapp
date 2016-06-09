@@ -23,8 +23,8 @@ public class UniversityAdapter extends BaseAdapter {
 
             new University(1, "Wojskowa Akademia Techniczna",
                     "https://usosapps.wat.edu.pl",
-                    "9G6AR9WpNXz3uR2QmAFY",
-                    "Wju2N3pm9bSf6MERYydEY5RcNJn6wWeXfpNj5JaE")
+                    "N6X59S39Aq5fUCtDUVYG",
+                    "agvSxe36JxVyvxpwEKHLpumzGJHSjX8GhMSpvq5N")
     };
 
     private LayoutInflater layoutInflater;

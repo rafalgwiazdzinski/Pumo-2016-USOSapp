@@ -42,6 +42,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        spinner.setSelection(read_university_id());
+    }
+
+    @Override
     public void onBackPressed() {
     }
 
@@ -82,6 +89,15 @@ public class MainActivity extends AppCompatActivity {
         editor.commit();
     }
 
+    public int read_university_id() {
+        SharedPreferences sharedPref = context.getSharedPreferences("appPref", Context.MODE_PRIVATE);
+        int id = sharedPref.getInt("UNIVERSITY_ID", 0);
+        return id;
+    }
+
+    void isLogin() {
+
+    }
 
 }
 

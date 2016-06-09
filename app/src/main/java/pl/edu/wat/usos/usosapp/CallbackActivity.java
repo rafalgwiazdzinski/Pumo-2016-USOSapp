@@ -14,6 +14,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telecom.Call;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -95,13 +96,7 @@ public class CallbackActivity extends AppCompatActivity implements AdapterView.O
         name = (TextView) findViewById(R.id.name);
         sex = (TextView) findViewById(R.id.sex);
         email = (TextView) findViewById(R.id.email);
-        Uri uri = getIntent().getData();
-        oauth_token = uri.getQueryParameter("oauth_token");
-        oauth_verifier = uri.getQueryParameter("oauth_verifier");
-        saveOauthVerifier();
-        university_id = read_university_id();
-        context = this;
-        new AccessTokenTask().execute();
+
     }
 
 
@@ -112,6 +107,13 @@ public class CallbackActivity extends AppCompatActivity implements AdapterView.O
         name.setText("");
         sex.setText("");
         email.setText("");
+
+        Uri uri = getIntent().getData();
+        oauth_token = uri.getQueryParameter("oauth_token");
+        oauth_verifier = uri.getQueryParameter("oauth_verifier");
+        saveOauthVerifier();
+        university_id = read_university_id();
+        context = this;
         new AccessTokenTask().execute();
     }
 
@@ -213,7 +215,6 @@ public class CallbackActivity extends AppCompatActivity implements AdapterView.O
     }
 
     public class AccessTokenTask extends AsyncTask<Void, Void, User> {
-
         @Override
         protected User doInBackground(Void... params) {
             try {
@@ -241,6 +242,7 @@ public class CallbackActivity extends AppCompatActivity implements AdapterView.O
                 save_student_ID();
                 saveAccessToken();
             } catch (NullPointerException e) {
+                //Log.d("TAAAAAAAAGGGGGGGG!!", responseBody);
                 Intent i = new Intent(context, MainActivity.class);
                 startActivity(i);
             }

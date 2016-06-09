@@ -9,6 +9,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
@@ -65,6 +68,9 @@ public class GradesActivity extends AppCompatActivity {
     private Context context = this;
     private int universityId;
 
+    private OAuth10aService service;
+    private ApiUrls apiUrls;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +85,16 @@ public class GradesActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         pd = new ProgressDialog(context);
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
         universityId = read_university_id();
+        apiUrls = new ApiUrls(universityId);
 
         try {
             groupsUser = new GroupsQuery().execute().get();
@@ -138,6 +153,55 @@ public class GradesActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case R.id.refresh:
+                semestr = semestrAdapter.getSemesterId(spinner.getSelectedItemPosition());
+
+                j = 0;
+                GroupsUser.Termses[] course_term = groupsUser.getGroups().get(semestr);
+
+
+                ArrayList<String> courseTerm = new ArrayList<String>();
+                courseTerm.add(semestr);
+                for(int i = 0; i< course_term.length; i++) {
+                    if(!courseTerm.contains(course_term[i].getCourse_id())) {
+                        courseTerm.add(course_term[i].getCourse_id());
+                    }
+                }
+                int blad = 0;
+
+                try {
+                    blad = new GradesQuery().execute(courseTerm).get();
+                    wyswietl_przedmioty_semestru();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+
+
+                if(blad < 0) {
+                    Toast.makeText(context, "Brak dostępu do internetu", Toast.LENGTH_SHORT).show();
+                    Intent i = new Intent(context, MainActivity.class);
+                    startActivity(i);
+                }
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     public void wyswietl_przedmioty_semestru() {
         courseAdapter = new CourseAdapter(groupsUser.getGroups(), semestr, courses);
         mRecyclerView.setAdapter(courseAdapter);
@@ -167,16 +231,13 @@ public class GradesActivity extends AppCompatActivity {
         return new OAuth1AccessToken(access_token, access_token_secret);
     }
 
-    private OAuth10aService service;
-    private ApiUrls apiUrls = new ApiUrls(universityId);
 
     public class GroupsQuery extends AsyncTask<Void, Void, GroupsUser> {
 
         @Override
         protected GroupsUser doInBackground(Void... params) {
             try {
-                int universityId = read_university_id();
-                service = OAuthServiceBuilder.getService((University) new UniversityAdapter().getItem(read_university_id()));
+                service = OAuthServiceBuilder.getService((University) new UniversityAdapter().getItem(universityId));
                 OAuthRequest request = new OAuthRequest(Verb.GET, apiUrls.getStudentGroupsUrl(), service);
                 service.signRequest(read_accessToken(), request);
                 Response response = request.send();
@@ -208,6 +269,7 @@ public class GradesActivity extends AppCompatActivity {
                 }
             } catch (NullPointerException e) {
                 e.printStackTrace();
+                Log.d("TAAAAAAAAGGGGGGGG!!", responseBody);
                 Toast.makeText(context, "Zaloguj się!", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(context, MainActivity.class));
             }
